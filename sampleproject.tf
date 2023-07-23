@@ -53,7 +53,7 @@ resource "aws_route_table_association" "public_subnet_association" {
   route_table_id = aws_route_table.public.id
 }
 
-#secutiry.tf
+#security.tf
 resource "aws_security_group" "web_server" {
   name        = "web-server-sg"
   description = "Allow SSH and HTTP access from anywhere"
@@ -77,3 +77,21 @@ resource "aws_security_group" "web_server" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+#Ec2.tf
+resource "aws_instance" "example" {
+  ami           = "ami-0557a15b87f6559cf"
+  instance_type = "t2.micro"
+  key_name      = "rjthapaa"
+  subnet_id     = aws_subnet.public.id
+  security_groups = [
+    aws_security_group.web_server.id
+  ]
+  user_data = filebase64("userdata.sh")
+  tags = {
+    Name = "EC2web-server"
+  }
+}
+
+
+
