@@ -93,6 +93,16 @@ resource "aws_instance" "example" {
   }
 }
 
+#Elasticip.tf
+resource "aws_eip" "ip" {
+  instance = aws_instance.example.id
+  vpc      = true
+
+  tags = {
+    Name = "elastic-ip"
+  }
+}
+
 #Userdata.sh
 #!/bin/bash
 sudo apt-get update -y
